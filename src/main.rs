@@ -3,19 +3,27 @@ fn main() {
     let mut l = List::new();
 
     l.insert_at_head(100);
-    l.insert_at_head(200);
+    l.insert_at_tail(200);
     l.insert_at_head(300);
     l.insert_at_tail(400);
-    l.insert_at_tail(500);
-    l.insert_at_tail(600);
-    l.insert_at_tail(700);
-    l.insert_at_head(800);
+    match l.traverse() {
+        Ok(list) => println!("{:#?}", list),
+        Err(e) => println!("{}", e),
+    }
 
-    println!("{:#?}", l.traverse()); 
-    
-    l.delete_from_head();
-    println!("{:#?}", l.traverse()); 
-    
-    l.delete_from_tail();
-    println!("{:#?}", l.traverse()); 
+    if let Err(e) = l.delete_from_head() {
+        println!("{}", e);
+    }
+    match l.traverse() {
+        Ok(list) => println!("{:#?}", list),
+        Err(e) => println!("{}", e),
+    }
+
+    if let Err(e) = l.delete_from_tail() {
+        println!("{}", e);
+    }
+    match l.traverse() {
+        Ok(list) => println!("{:#?}", list),
+        Err(e) => println!("{}", e),
+    }
 }
