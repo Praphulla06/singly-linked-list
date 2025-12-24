@@ -2,10 +2,10 @@ use linked_list::List;
 fn main() {
     let mut l = List::new();
 
-    l.insert_at_head(100);
-    l.insert_at_tail(200);
-    l.insert_at_head(300);
-    l.insert_at_tail(400);
+    l.insert_at_head(10.10);
+    l.insert_at_tail(20.20);
+    l.insert_at_head(30.30);
+    l.insert_at_tail(40.40);
     match l.traverse() {
         Ok(list) => println!("{:#?}", list),
         Err(e) => println!("{}", e),

@@ -1,29 +1,29 @@
 use std::{rc::Rc, cell::RefCell};
 
 #[derive(Debug, Clone)]
-pub struct Node {
-    data: i32,
-    next: Option<Rc<RefCell<Node>>>,
+pub struct Node<T: Clone + Copy> {
+    data: T,
+    next: Option<Rc<RefCell<Node<T>>>>,
 }
-impl Node {
-    fn new(data: i32) -> Self {
+impl<T: Clone + Copy> Node<T> {
+    fn new(data: T) -> Self {
         Self { data, next: None }
     }
 }
 
 #[derive(Debug, Clone)]
-pub struct List {
-    head: Option<Rc<RefCell<Node>>>,
-    tail: Option<Rc<RefCell<Node>>>,
+pub struct List<T: Clone + Copy> {
+    head: Option<Rc<RefCell<Node<T>>>>,
+    tail: Option<Rc<RefCell<Node<T>>>>,
 }
-impl List {
+impl<T: Clone + Copy> List<T> {
     pub fn new() -> Self {
         Self {
             head: None,
             tail: None
         }
     }
-    pub fn insert_at_head(&mut self, data: i32) {
+    pub fn insert_at_head(&mut self, data: T) {
         let new_node = Rc::new(RefCell::new(Node::new(data)));
 
         match self.head.take() {
@@ -37,7 +37,7 @@ impl List {
             }
         }
     }
-    pub fn insert_at_tail(&mut self, data: i32) {
+    pub fn insert_at_tail(&mut self, data: T) {
         let new_node = Rc::new(RefCell::new(Node::new(data)));
 
         match self.tail.take() {
@@ -84,10 +84,10 @@ impl List {
             None => Err("The list is empty!")
         }
     }
-    pub fn traverse(&self) -> Result<Vec<i32>, &'static str> {
+    pub fn traverse(&self) -> Result<Vec<T>, &'static str> {
         match &self.head {
             Some(current_node) => {
-                let mut values: Vec<i32> = Vec::new();
+                let mut values: Vec<T> = Vec::new();
                 let mut temp = Rc::clone(current_node);
                 while temp.borrow().next.is_some() {
                     // print!("{} -> ", temp.borrow().data);
