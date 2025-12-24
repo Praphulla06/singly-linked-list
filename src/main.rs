@@ -82,7 +82,22 @@ impl List {
             } 
         }
     }
-    
+    fn traverse(&self) {
+        match &self.head {
+            None => {
+                println!("The list is empty!");
+            },
+            Some(current_node) => {
+                let mut temp = Rc::clone(current_node);
+                while temp.borrow().next.is_some() {
+                    print!("{} -> ", temp.borrow().data);
+                    let next = Rc::clone(temp.borrow().next.as_ref().unwrap());
+                    temp = next;
+                }
+                println!("{} -> None.", temp.borrow().data);
+            }
+        }
+    }
 }
 
 fn main() {
@@ -99,11 +114,11 @@ fn main() {
     l.insert_at_tail(700);
     l.insert_at_head(800);
 
-    // l.traverse(); 
+    l.traverse(); 
 
     l.delete_from_head();
-    // l.traverse(); 
+    l.traverse(); 
     
     l.delete_from_tail();
-    // l.traverse(); 
+    l.traverse(); 
 }
