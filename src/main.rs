@@ -17,9 +17,6 @@ struct List {
     tail: Option<Rc<RefCell<Node>>>,
 }
 impl List {
-    fn is_empty(&self) -> bool {
-        self.head.is_none()
-    }
     fn insert_at_head(&mut self, data: i32) {
         let new_node = Rc::new(RefCell::new(Node::new(data)));
 
@@ -63,24 +60,29 @@ impl List {
         }
     }
     fn delete_from_tail(&mut self) {
-        let temp_head = Rc::clone(
-            match &self.head {
-                Some(node) => node,
-                None => {
-                    println!("List is empty!");
+        match &self.head {
+            None => {
+                println!("The list is empty!");
+                return;
+            },
+            Some(head_node) => {
+                if head_node.borrow().next.is_none() {
+                    self.head = None;
+                    self.tail = None;
                     return;
                 }
-            }
-        );
-        match self.tail.take() {
-            Some(old_tail) => {
-                while temp_head.borrow_mut().next.is_some() {
-                    let temp = temp_head.borrow_mut().next.clone();
+                
+                let mut temp = Rc::clone(&head_node);
+                while temp.borrow().next.as_ref().unwrap().borrow().next.is_some() {
+                    let next_node = Rc::clone(temp.borrow().next.as_ref().unwrap());
+                    temp = next_node;
                 }
-            },
-            None => {}
+                temp.borrow_mut().next = None;
+                self.tail = Some(temp);
+            } 
         }
     }
+    
 }
 
 fn main() {
@@ -91,10 +93,17 @@ fn main() {
     l.insert_at_head(100);
     l.insert_at_head(200);
     l.insert_at_head(300);
-
     l.insert_at_tail(400);
+    l.insert_at_tail(500);
+    l.insert_at_tail(600);
+    l.insert_at_tail(700);
+    l.insert_at_head(800);
 
-    println!("{:#?}", l);
+    // l.traverse(); 
+
     l.delete_from_head();
-    println!("{:#?}", l);
+    // l.traverse(); 
+    
+    l.delete_from_tail();
+    // l.traverse(); 
 }
